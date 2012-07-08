@@ -1,0 +1,11 @@
+{
+    "app": {
+        "host": "production"
+      , "port": 80
+    }
+  , "store": {
+        "host": "localhost"
+      , "port": 6379
+      , "prefix": "my_app:production"
+    }
+}
