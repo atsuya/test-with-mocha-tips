@@ -6,6 +6,11 @@
   , "store": {
         "host": "localhost"
       , "port": 6379
-      , "prefix": "my_app:production"
+      , "prefix": "my_app:production:"
+    }
+  , "socketio": {
+      "log": {
+        "level": 2
+      }
     }
 }

@@ -12,18 +12,26 @@ var DataStore = require('./lib/data-store')
 var app = module.exports = express.createServer()
   , sioServer = sio.listen(app);
 
+sioServer.configure(function() {
+  console.log('log level: ' + config.socketio.log.level);
+  sioServer.set('log level', config.socketio.log.level);
+  sioServer.set('transports', ['websocket']);
+});
 app.listen(config.app.port, config.app.host);
 
 sioServer.sockets.on('connection', function (socket) {
-  socket.on('user.connect', function(data) {
-    socket.broadcast.emit('user.connected', data);
+  socket.on('user.connect', function(data, callback) {
+    dataStore.addUser(data.username, function(error, result) {
+      callback('user added');
+    });
   });
-  socket.on('user.message', function (data) {
+  socket.on('user.message', function (data, callback) {
     dataStore.addMessage(data, function(error, result) {
       if (error) {
         console.log(error);
       }
-      socket.broadcast.emit('user.messaged', data);
+      callback('mesage sent');
+      socket.broadcast.emit('user.messageReceived', data);
     });
   });
 });

@@ -1,14 +1,17 @@
 var sio = require('socket.io-client')
-  , async = require('async');
+  , async = require('async')
+  , underscore = require('underscore');
 
 function User(url, data) {
   this.url = url;
-  this.data = data;
+  this.data = underscore.extend({}, data);
   this.connection = null;
 }
 
 User.prototype.connect = function(callback) {
   var self = this;
+
+  console.log('url: ' + self.url);
 
   self.connection = sio.connect(self.url, {
       'force new connection': true
@@ -16,9 +19,11 @@ User.prototype.connect = function(callback) {
     , reconnect: false
   });
   self.connection.on('connect', function() {
-    var message = { username: self.data.username, user_id: self.data.id, action: 'connect' };
-    self.connection.json.send(message);
-    setTimeout(function() { callback(null); }, 500);
+    var message = { username: self.data.username };
+    self.connection.emit('user.connect', message, function(data) {
+      console.log('recieved ack! ' + data);
+      callback(null);
+    });
   });
 };
 
@@ -28,8 +33,10 @@ User.prototype.disconnect = function(callback) {
 };
 
 User.prototype.sendMessage = function(message, callback) {
-  this.connection.json.send(message);
-  callback(null);
+  this.connection.emit('user.message', message, function(data) {
+    console.log('received ack!' + data);
+    callback(null);
+  });
 };
 
 module.exports = User;

@@ -7,12 +7,17 @@ global.test = {
   , config: config
 };
 
-var RedisCleaner = require('./redis-cleaner');
-  , redisCleaner = new RedisCleaner(config.store.host, config.store.port);
+var RedisCleaner = require('./redis-cleaner')
+  , redisCleaner = new RedisCleaner(
+        config.store.host
+      , config.store.port
+      , config.store.prefix
+    )
+  , App = require('./app')
+  , app = new App();
 
 before(function(done) {
-  // put something if you have something
-  done();
+  app.start(done);
 });
 
 beforeEach(function(done) {
@@ -25,6 +30,5 @@ afterEach(function(done) {
 });
 
 after(function(done) {
-  // put something if you have something
-  done();
+  app.shutdown(done);
 });

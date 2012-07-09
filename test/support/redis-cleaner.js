@@ -13,6 +13,8 @@ RedisCleaner.prototype.createClient = function() {
 RedisCleaner.prototype.clean = function(callback) {
   var client = this.createClient()
     , key = this.prefix + '*';
+
+  console.log('key!!!!!!!!!!!!!!!!!! ' + key);
   client.keys(key, function(error, response) {
     if (error || response.length <= 0) {
       return callback(error);
