@@ -13,7 +13,6 @@ var app = module.exports = express.createServer()
   , sioServer = sio.listen(app);
 
 sioServer.configure(function() {
-  console.log('log level: ' + config.socketio.log.level);
   sioServer.set('log level', config.socketio.log.level);
   sioServer.set('transports', ['websocket']);
 });
@@ -26,12 +25,7 @@ sioServer.sockets.on('connection', function (socket) {
     });
   });
   socket.on('user.message', function (data, callback) {
-    dataStore.addMessage(data, function(error, result) {
-      if (error) {
-        console.log(error);
-      }
-      callback('mesage sent');
-      socket.broadcast.emit('user.messageReceived', data);
-    });
+    callback('mesage sent');
+    socket.broadcast.emit('user.messageReceived', data);
   });
 });

@@ -21,4 +21,8 @@ DoneCriteria.prototype.remove = function(criterion) {
   }
 };
 
+/*
+ * TODO: add callback when given criteria are done
+ */
+
 module.exports = DoneCriteria;

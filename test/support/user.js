@@ -11,8 +11,6 @@ function User(url, data) {
 User.prototype.connect = function(callback) {
   var self = this;
 
-  console.log('url: ' + self.url);
-
   self.connection = sio.connect(self.url, {
       'force new connection': true
     , transports: ['websocket']
@@ -21,7 +19,6 @@ User.prototype.connect = function(callback) {
   self.connection.on('connect', function() {
     var message = { username: self.data.username };
     self.connection.emit('user.connect', message, function(data) {
-      console.log('recieved ack! ' + data);
       callback(null);
     });
   });
@@ -34,7 +31,6 @@ User.prototype.disconnect = function(callback) {
 
 User.prototype.sendMessage = function(message, callback) {
   this.connection.emit('user.message', message, function(data) {
-    console.log('received ack!' + data);
     callback(null);
   });
 };
