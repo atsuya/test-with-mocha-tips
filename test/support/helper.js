@@ -2,11 +2,6 @@ var path = require('path')
   , assert = require('assert')
   , should = require('should')
   , config = require('config');
-global.test = {
-    root: path.resolve(__dirname, '../')
-  , config: config
-  , appUrl: 'http://' + config.app.host + ':' + config.app.port
-};
 
 var RedisCleaner = require('./redis-cleaner')
   , redisCleaner = new RedisCleaner(
@@ -16,6 +11,12 @@ var RedisCleaner = require('./redis-cleaner')
     )
   , App = require('./app')
   , app = new App();
+
+global.test = {
+    root: path.resolve(__dirname, '../')
+  , config: config
+  , appUrl: 'http://' + config.app.host + ':' + config.app.port
+};
 
 before(function(done) {
   app.start(done);
